@@ -15,7 +15,9 @@ class ConcertsController < ApplicationController
   end
 
   # GET /concerts/1 or /concerts/1.json
-  def show; end
+  def show
+    render(@concert) if params[:inline]
+  end
 
   # GET /concerts/new
   def new
@@ -49,10 +51,7 @@ class ConcertsController < ApplicationController
       else
         format.html { render(:edit) }
         format.json do
-          render(
-            json: @concert.errors,
-            status: :unprocessable_entity
-          )
+          render(json: @concert.errors, status: :unprocessable_entity)
         end
       end
     end
