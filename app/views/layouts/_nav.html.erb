@@ -28,6 +28,13 @@
                   destroy_user_session_path,
                   method: :delete,
                   class: "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"  %>
+              <div class="flex justify-items-end text-gray-300 px-3 py-2 text-sm font-bold">
+                <%= turbo_frame_tag("favorites-count-number", src: favorites_path(count_only: true)) do %>
+                  <span id="favorites-count" class="ml-2">
+                    Favorite Count
+                  </span>
+                <% end %>
+              </div>
             <% else %>
               <%= link_to "Sign Up",
                     new_user_registration_path,
@@ -42,4 +49,3 @@
     </div>
   </div>
 </nav>
-
