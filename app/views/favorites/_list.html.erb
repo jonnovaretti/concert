@@ -2,7 +2,9 @@
   <section class="my-4" data-controller="favorite-toggle" data-favorite-toggle-visible-value="true">
     <div class="text-3xl font-bold">Favorite Concerts</div>
     <button class="<%= SimpleForm.button_class %> py-1 text-xl font-semibold" 
-            data-action="click->favorite-toggle#toggle" data-favorite-toggle-target="elementWithText">
+            data-action="click->favorite-toggle#toggle" 
+            data-favorite-toggle-target="elementWithText"
+            data-favorite-toggle-hidden-class="hidden">
       Hide
     </button>
     <div data-favorite-toggle-target="elementToHide">
