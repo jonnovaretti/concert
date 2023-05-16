@@ -1,4 +1,4 @@
-import * from React from 'react'
+import * as React from 'react'
 import Row from './row'
 
 interface VenueProps {
