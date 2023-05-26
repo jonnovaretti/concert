@@ -11,12 +11,15 @@ class ConcertsController < ApplicationController
 
   # GET /concerts or /concerts.json
   def index
-    @concerts = Concert.all
+    @query = params[:query]
+    @concerts = Concert.search(@query)
   end
 
   # GET /concerts/1 or /concerts/1.json
   def show
-    render(@concert) if params[:inline]
+    if params[:inline]
+      render(@concert)
+    end
   end
 
   # GET /concerts/new
@@ -25,7 +28,8 @@ class ConcertsController < ApplicationController
   end
 
   # GET /concerts/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /concerts or /concerts.json
   def create
@@ -33,7 +37,7 @@ class ConcertsController < ApplicationController
 
     respond_to do |format|
       if @concert.save
-        format.html { redirect_to @concert, notice: 'Concert was successfully created.' }
+        format.html { redirect_to @concert, notice: "Concert was successfully created." }
         format.json { render :show, status: :created, location: @concert }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -50,9 +54,12 @@ class ConcertsController < ApplicationController
         format.json { render :show, status: :ok, location: @concert }
       else
         format.html { render(:edit) }
-        format.json do
-          render(json: @concert.errors, status: :unprocessable_entity)
-        end
+        format.json {
+          render(
+            json: @concert.errors,
+            status: :unprocessable_entity
+          )
+        }
       end
     end
   end
@@ -61,7 +68,7 @@ class ConcertsController < ApplicationController
   def destroy
     @concert.destroy
     respond_to do |format|
-      format.html { redirect_to concerts_url, notice: 'Concert was successfully destroyed.' }
+      format.html { redirect_to concerts_url, notice: "Concert was successfully destroyed." }
       format.json { head :no_content }
     end
   end

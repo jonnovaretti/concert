@@ -8,10 +8,9 @@
 ***/
 module.exports = {
   content: [
-    "./app/views/**/*.html.erb",
-    "./app/views/**/*.turbo_stream.erb",
+    "./app/views/**/*.(html|turbostream).erb",
     "./app/helpers/**/*.rb",
-    "./app/javascript/**/*.js",
+    "./app/javascript/**/*.(js|ts|tsx)",
     "./config/initializers/simple_form_tailwind.rb",
   ],
 }

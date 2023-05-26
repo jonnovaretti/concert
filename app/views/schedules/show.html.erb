@@ -3,25 +3,20 @@
     <div class="grid grid-cols-7 gap-0 mb-6">
       <% @schedule.schedule_days.each do |schedule_day| %>
         <% date_string = schedule_day.day.by_example("2006-01-02") %>
-        <section class="column">
-          <div class="text-center">
-            <%= schedule_day.day.by_example("Jan 2") %>
-          </div>
-        </section>
+        <div class="text-center border-b-2 border-transparent"
+            data-controller="css"
+            data-css-css-class="border-red-700"
+            data-css-status-value="false"
+            data-css-target="elementToChange"
+            data-action="click->css#toggle">
+          <%= schedule_day.day.by_example("Jan 2") %>
+        </div>
       <% end %>
       <div>
         Show All
       </div>
     </div>
-    <div class="flex justify-center">
-      <div class="w-4/5">
-        <%= text_field_tag("query", "",
-              placeholder: "Search concerts", type: "search",
-              id: "search_query",
-              autocomplete: "off",
-              class: "w-full px-3 py-2 border border-gray-400 rounded-lg") %>
-      </div>
-    </div>
+    <%= render("schedules/search_form") %>
   </section>
   <br>
   <% if current_user %>

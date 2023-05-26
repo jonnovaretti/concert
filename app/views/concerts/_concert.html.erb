@@ -7,7 +7,11 @@
       <div class="col-span-3">
         <div class="name">
           <div class="text-lg font-bold">
-            <%= link_to(concert.name, concert, data: {"turbo-frame": "_top"}) %>
+            <%= link_to(
+                  concert.name,
+                  concert,
+                  data: {"turbo-frame": "_top"}
+                ) %>
           </div>
         </div>
         <div class="bands">
@@ -41,16 +45,16 @@
                     "Unfavorite",
                     favorite_path(id: current_user.favorite(concert)),
                     method: "delete",
-                    class: SimpleForm.button_class,
-                    form: {data: {"turbo-frame": "favorite-concerts"}}
+                    form: {data: {"turbo-frame": "favorite-concerts"}},
+                    class: SimpleForm.button_class
                   ) %>
             <% else %>
               <%= button_to(
                     "Favorite",
                     favorites_path(concert_id: concert.id),
                     method: "post",
-                    class: SimpleForm.button_class,
-                    form: {data: {"turbo-frame": "favorite-concerts"}}
+                    form: {data: {"turbo-frame": "favorite-concerts"}},
+                    class: SimpleForm.button_class
                   ) %>
             <% end %>
           <% end %>
