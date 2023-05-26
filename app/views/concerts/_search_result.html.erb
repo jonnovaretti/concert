@@ -1,0 +1,23 @@
+<article class="my-6 max-w-screen-lg">
+  <div>
+    <%= concert.start_time.by_example("Jan 2 @3:04 PM") %>
+    <div class="font-bold text-xl">
+      <%= link_to(concert, data: {"turbo-frame": "_top"}) do %>
+        <%= highlight(concert.name, /#{query}/i) %>
+      <% end %>
+      <div class="float-right">
+        <% if concert.sold_out? %>
+          Sold out
+        <% else %>
+          <%= pluralize(concert.unsold_ticket_count, "Tickets") %>
+          Remaining
+        <% end %>
+      </div>
+    </div>
+    <div>
+      <%= highlight(concert.bands.map(&:name).join(", "), /#{query}/i) %>
+    </div>
+    <div><%= concert.genre_tags.split(",").to_sentence %></div>
+    <div><%= concert.venue.name %></div>
+  </div>
+</article>

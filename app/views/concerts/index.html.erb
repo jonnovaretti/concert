@@ -1,9 +1,18 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Concerts</h1>
-
-<div id="concerts">
-  <%= render @concerts %>
-</div>
-
-<%= link_to "New concert", new_concert_path %>
+<%= turbo_frame_tag("search-results") do %>
+  <article
+      class="fixed bg-gray-300 z-10
+             rounded-3xl ring-4 ring-gray-800
+             max-w-screen-lg w-full
+             mr-20 ml-32 px-6 py-2 mt-2
+             overflow-y-auto overscroll-contain"
+      data-search-target="results">
+    <div class="text-3xl font-bold text-center">Search Results</div>
+    <%= render(
+          partial: "concerts/search_result",
+          collection: @concerts,
+          as: :concert,
+          locals: {query: @query}
+        ) %>
+  </article>
+<% end %>
+<%= link_to("New Concert", new_concert_path) %>
