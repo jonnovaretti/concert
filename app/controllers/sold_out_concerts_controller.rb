@@ -6,17 +6,10 @@
 # We make no guarantees that this code is fit for any purpose.
 # Visit https://pragprog.com/titles/nrclient2 for more book information.
 #---
-Rails.application.routes.draw do
-  resources :favorites
-  resource :schedule
-  resources :shopping_carts
-  resources :ticket_orders
-  resources :tickets
-  resources :gigs
-  resources :concerts
-  resources :bands
-  resources :venues
-  resource(:sold_out_concerts, only: :show)
-  devise_for :users
-  root to: "schedules#show"
+class SoldOutConcertsController < ApplicationController
+  def show
+    concerts = Concert.includes(:venue, gigs: :band).all
+    sold_out_concert_ids = concerts.select(&:sold_out?).map(&:id)
+    render(json: {sold_out_concert_ids: sold_out_concert_ids})
+  end
 end

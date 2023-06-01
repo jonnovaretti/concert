@@ -12,6 +12,9 @@
 
 import { application } from "./application"
 
+import ConcertController from "./concert_controller.ts"
+application.register("concert", ConcertController)
+
 import CssController from "./css_controller.ts"
 application.register("css", CssController)
 
@@ -20,6 +23,9 @@ application.register("css-flip", CssFlipController)
 
 import SearchController from "./search_controller.ts"
 application.register("search", SearchController)
+
+import SoldOutDataController from "./sold_out_data_controller.ts"
+application.register("sold-out-data", SoldOutDataController)
 
 import TextController from "./text_controller.ts"
 application.register("text", TextController)

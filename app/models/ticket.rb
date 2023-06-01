@@ -44,4 +44,8 @@ class Ticket < ApplicationRecord
       update(status: "unsold", user: user)
     end
   end
+
+  def to_concert_h
+    {id: id, row: row, number: number, status: status}
+  end
 end

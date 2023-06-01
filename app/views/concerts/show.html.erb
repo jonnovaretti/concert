@@ -43,7 +43,10 @@
               hover:bg-black">
     Clear Tickets
   </div>
-  <div id="react-element" />
+  <div id="react-element"
+       data-row-count="<%= @concert.venue.rows %>"
+       data-seats-per-row="<%= @concert.venue.seats_per_row %>"
+       data-concert-id="<%= @concert.id %>"></div>
 </div>
 <div class="actions">
   <%= link_to("Edit", edit_concert_path(@concert)) %>
