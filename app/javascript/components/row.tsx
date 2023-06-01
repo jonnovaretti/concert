@@ -1,7 +1,10 @@
 import * as React from "react"
 import Seat from "./seat"
+import { RowData, TicketData } from "./venue"
 
 interface RowProps {
+  concertId: number
+  rowData: RowData
   rowNumber: number
   seatsPerRow: number
   ticketsToBuyCount: number
@@ -12,12 +15,21 @@ const Row = (props: RowProps): React.ReactElement => {
     Array.from(Array(props.seatsPerRow).keys()).map(() => "unsold")
   )
 
+  React.useEffect(() => {
+    if (props.rowData) {
+      setSeatStatuses(
+        props.rowData.map((ticketData: TicketData) => ticketData.status)
+      )
+    }
+  }, [props.rowData])
+
   function isSeatValid(seatNumber: number): boolean {
     if (seatNumber + props.ticketsToBuyCount > props.seatsPerRow) {
       return false
     }
     for (let i = 1; i < props.ticketsToBuyCount; i++) {
-      if (seatStatuses[seatNumber + i] === "held") {
+      const seatStatus = seatStatuses[seatNumber + i]
+      if (seatStatus === "held" || seatStatus === "purchased") {
         return false
       }
     }
@@ -25,8 +37,9 @@ const Row = (props: RowProps): React.ReactElement => {
   }
 
   function validSeatStatus(seatNumber: number): string {
-    if (seatStatuses[seatNumber] === "held") {
-      return "held"
+    const seatStatus = seatStatuses[seatNumber]
+    if (seatStatus === "held" || seatStatus === "purchased") {
+      return seatStatus
     } else {
       return isSeatValid(seatNumber) ? "unsold" : "invalid"
     }
@@ -42,32 +55,56 @@ const Row = (props: RowProps): React.ReactElement => {
     }
   }
 
+  function updateSeatStatus(seatNumber: number): string[] {
+    return seatStatuses.map((status: string, index: number) => {
+      if (
+        index >= seatNumber &&
+        index < seatNumber + props.ticketsToBuyCount
+      ) {
+        return newState(seatStatuses[seatNumber])
+      } else {
+        return status
+      }
+    })
+  }
+
+  const csrfToken = (): string => {
+    return document
+      .querySelector("[name='csrf-token']")
+      ?.getAttribute("content")
+  }
+
   function onSeatChange(seatNumber: number): void {
-    if (validSeatStatus(seatNumber) === "invalid") {
+    const validStatus = validSeatStatus(seatNumber)
+    if (validStatus === "invalid" || validStatus === "purchased") {
       return
     }
-    setSeatStatuses(
-      seatStatuses.map((status, index) => {
-        if (
-          index >= seatNumber &&
-          index < seatNumber + props.ticketsToBuyCount
-        ) {
-          return newState(seatStatuses[seatNumber])
-        } else {
-          return status
-        }
-      })
-    )
+    const newSeatStatuses = updateSeatStatus(seatNumber)
+    setSeatStatuses(newSeatStatuses)
+    fetch(`/shopping_carts`, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": csrfToken(),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        concertId: props.concertId,
+        row: props.rowNumber + 1,
+        seatNumber: seatNumber + 1,
+        status: newSeatStatuses[seatNumber],
+        ticketsToBuyCount: props.ticketsToBuyCount,
+      }),
+    })
   }
 
   const seatItems = Array.from(Array(props.seatsPerRow).keys()).map(
-    (seatNumber) => {
+    (seatNumber: number) => {
       return (
         <Seat
+          clickHandler={onSeatChange}
           key={seatNumber}
           seatNumber={seatNumber}
           status={validSeatStatus(seatNumber)}
-          clickHandler={onSeatChange}
         />
       )
     }

@@ -1,21 +1,28 @@
 import * as React from "react"
 import Row from "./row"
+import { VenueData } from "./venue"
 
 interface VenueBodyProps {
-  rows: number
+  concertId: number
+  rowCount: number
   seatsPerRow: number
   ticketsToBuyCount: number
+  venueData: VenueData
 }
 
-const rowItems = (
-  rows: number,
-  seatsPerRow: number,
-  ticketsToBuyCount: number
-) => {
-  const rowNumbers = Array.from(Array(rows).keys())
-  return rowNumbers.map((rowNumber) => (
+const rowItems = ({
+  concertId,
+  rowCount,
+  seatsPerRow,
+  ticketsToBuyCount,
+  venueData,
+}) => {
+  const rowNumbers = Array.from(Array(rowCount).keys())
+  return rowNumbers.map((rowNumber: number) => (
     <Row
+      concertId={concertId}
       key={rowNumber}
+      rowData={venueData[rowNumber]}
       rowNumber={rowNumber}
       seatsPerRow={seatsPerRow}
       ticketsToBuyCount={ticketsToBuyCount}
@@ -26,9 +33,7 @@ const rowItems = (
 export const VenueBody = (props: VenueBodyProps): React.ReactElement => {
   return (
     <table className="table">
-      <tbody>
-        {rowItems(props.rows, props.seatsPerRow, props.ticketsToBuyCount)}
-      </tbody>
+      <tbody>{rowItems(props)}</tbody>
     </table>
   )
 }

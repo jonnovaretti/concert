@@ -5,7 +5,8 @@
              max-w-screen-lg w-full
              mr-20 ml-32 px-6 py-2 mt-2
              overflow-y-auto overscroll-contain"
-      data-search-target="results">
+      data-search-target="results"
+      data-action="click@window->search#resetOnOutsideClick">
     <div class="text-3xl font-bold text-center">Search Results</div>
     <%= render(
           partial: "concerts/search_result",
